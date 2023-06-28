@@ -5,6 +5,10 @@ const app = express();
 const expressLayouts = require("express-ejs-layouts");
 
 const indexRouter = require("./routes/index");
+const authorRouter = require("./routes/authors");
+const bookRouter = require("./routes/books");
+const bodyParser = require("body-parser");
+
 app.set("views", __dirname + "/views");
 
 // Set Templating Engine
@@ -13,7 +17,7 @@ app.set("layout", "./layouts/layout");
 app.set("view engine", "ejs");
 
 app.use(express.static("public"));
-
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: false }));
 const mongoose = require("mongoose");
 
 main().catch((err) => console.log(err));
@@ -24,4 +28,7 @@ async function main() {
 }
 
 app.use("/", indexRouter);
+app.use("/authors", authorRouter);
+app.use("/books", bookRouter);
+
 app.listen(process.env.PORT || "3000");
