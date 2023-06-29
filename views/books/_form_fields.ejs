@@ -23,14 +23,16 @@
   <input
     type="number"
     id="publicationYear"
-    name="publicationYear" />
+    name="publicationYear"
+    value="<%= new Date().getFullYear() %>"
+    max="<%= new Date().getFullYear() %>" />
 </div>
 <div>
   <label for="coverImage">Cover Image:</label>
   <input
     type="file"
     id="coverImage"
-    name="coverImage"
+    name="cover"
     accept="image/jpeg,image/jpg,image/png" />
 </div>
 <div>

@@ -1,1 +1,12 @@
-Home
+<h2>Popular books</h2>
+<div>
+  <% books.forEach((book)=>{ %>
+  <a href="/">
+    <img
+      height="150"
+      width="100"
+      src="<%= book.coverImagePath  %>"
+      alt="" />
+  </a>
+  <% }) %>
+</div>

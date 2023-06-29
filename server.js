@@ -20,11 +20,19 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ limit: "10mb", extended: false }));
 const mongoose = require("mongoose");
 
-main().catch((err) => console.log(err));
-async function main() {
-  await mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
+// main().catch((err) => console.log(err));
+// async function main() {
+//   await mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
+//   console.log("connected to the database");
+//   // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
+// }
+
+try {
+  mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
   console.log("connected to the database");
   // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
+} catch {
+  console.log("error connecting to the dadabse");
 }
 
 app.use("/", indexRouter);
