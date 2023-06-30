@@ -28,12 +28,12 @@
     max="<%= new Date().getFullYear() %>" />
 </div>
 <div>
-  <label for="coverImage">Cover Image:</label>
+  <label for="cover">Cover Image:</label>
   <input
     type="file"
-    id="coverImage"
+    id="cover"
     name="cover"
-    accept="image/jpeg,image/jpg,image/png" />
+    class="filepond" />
 </div>
 <div>
   <label for="bookPdf">Book PDF:</label>
@@ -41,7 +41,7 @@
     type="file"
     id="bookPdf"
     name="bookPdf"
-    accept="application/pdf" />
+    class="filepond" />
 </div>
 <div>
   <button type="submit">Upload Book</button>
