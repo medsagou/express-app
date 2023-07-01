@@ -46,6 +46,20 @@ router.get("/new", async (req, res) => {
   res.render("books/new", { book: new Book() });
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    const author = await Author.findById(book.author);
+    res.render("books/view", {
+      book: book,
+      author: author,
+    });
+    // console.log(book.author);
+  } catch {
+    console.log("Error Loading the book");
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     // const files = req.files;
@@ -55,7 +69,7 @@ router.post("/", async (req, res) => {
 
     const book = new Book({
       title: req.body.title,
-      author: req.body.author,
+      //   author: req.body.author,
       description: req.body.description,
       publicationYear: req.body.publicationYear,
     });
@@ -63,19 +77,26 @@ router.post("/", async (req, res) => {
     savePdf(book, req.body.bookPdf);
 
     const allAuthors = await Author.find({}, "name");
+    let testAuth = true;
     allAuthors.forEach(async (author) => {
-      if (author.name.toUpperCase == req.body.author.toUpperCase) {
-      } else {
-        const author = new Author({
-          name: req.body.author,
-        });
-
-        const newAuth = await author.save();
+      if (
+        author.name.toUpperCase() === req.body.author.toUpperCase.toUpperCase()
+      ) {
+        const authorId = author.id;
+        testAuth = false;
       }
     });
-
+    if (testAuth == true) {
+      const author = new Author({
+        name: req.body.author,
+      });
+      const newAuth = await author.save();
+      const authorId = newAuth.id;
+    }
+    book.author = authorId;
     const newBook = await book.save();
-    res.redirect("/books");
+
+    // res.redirect("/books");
   } catch (err) {
     console.log(err);
     console.log("There is an error");

@@ -1,0 +1,25 @@
+<h1><%= book.title %></h1>
+
+<div>
+  <img
+    src="<%= book.coverImagePath %>"
+    alt="<%= book.title %>" />
+</div>
+
+<div>
+  <ul>
+    <li>Author: <a href="/authors/<%= author.id %>"><%= author.name %></a></li>
+    <li>Publication Year: <%= book.publicationYear %></li>
+  </ul>
+</div>
+<div>
+  <h3>Description</h3>
+  <p><%= book.description %></p>
+</div>
+
+<div>
+  <button>Download The Book</button>
+</div>
+<div>
+  <button class="cancel">Go Back</button>
+</div>
