@@ -79,9 +79,7 @@ router.post("/", async (req, res) => {
     const allAuthors = await Author.find({}, "name");
     let testAuth = true;
     allAuthors.forEach(async (author) => {
-      if (
-        author.name.toUpperCase() === req.body.author.toUpperCase.toUpperCase()
-      ) {
+      if (author.name.toUpperCase() === req.body.author.toUpperCase()) {
         const authorId = author.id;
         testAuth = false;
       }
@@ -108,6 +106,53 @@ router.post("/", async (req, res) => {
   //   } catch {
   //     res.render("/books/new");
   //   }
+});
+
+router.get("/:id/edit", async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+
+    const author = await Author.findById(book.author);
+    res.render("books/edit", {
+      book: book,
+      author: author,
+    });
+  } catch {
+    console.log("error here");
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    const author = await Book.findById(book.author);
+
+    book.title = req.body.title;
+    book.description = req.body.description;
+    book.publicationYear = req.body.publicationYear;
+    saveCover(book, req.body.cover);
+
+    const allAuthors = await Author.find({}, "name");
+    let testAuth = true;
+    allAuthors.forEach(async (author) => {
+      if (author.name.toUpperCase() === req.body.author.toUpperCase()) {
+        const authorId = author.id;
+        testAuth = false;
+        book.author = authorId;
+      }
+    });
+    if (testAuth == true) {
+      const author = new Author({
+        name: req.body.author,
+      });
+      const newAuth = await author.save();
+      const authorId = newAuth.id;
+      book.author = authorId;
+    }
+    book.save;
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 function saveCover(book, fileEncoded) {
