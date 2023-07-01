@@ -1,0 +1,13 @@
+<h2><%= author.name %></h2>
+<h3>Books</h3>
+<ul>
+  <% books.forEach((book)=> { %>
+  <li><%= book.title %> ( <%= book.publicationYear %> )</li>
+  <% }) %>
+</ul>
+
+<br />
+<div>
+  <a href="/authors/<%= author.id %>/edit">Edit Author</a>
+  <a href="/authors/<%= author.id %>/delete">Delete Author</a>
+</div>

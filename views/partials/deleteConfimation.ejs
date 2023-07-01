@@ -1,0 +1,16 @@
+<h2>Delete Confirmation</h2>
+<div>
+  <p>
+    Are you sure you want to delete
+    <a href="/authors/<%= author.id %>"> <%= author.name %></a>
+  </p>
+  <p>
+    Note: All the book of
+    <a href="/authors/<%= author.id %>"> <%= author.name %></a> will be delete
+    too!
+  </p>
+</div>
+<div>
+  <%- include('./delete', { author: author}) %>
+  <button class="cancel">Cancel</button>
+</div>

@@ -1,0 +1,20 @@
+<h2>Edit Author</h2>
+<div class="error">
+  <p><%= locals.errorMessage %></p>
+</div>
+<form
+  action="/authors/<%= author.id %>?_method=PUT"
+  method="POST">
+  <label for="name">Author Name</label>
+  <input
+    id="name"
+    type="text"
+    name="name"
+    value="<%= author.name %>" />
+  <button type="submit">Edit</button>
+  <button
+    type="reset"
+    class="cancel">
+    Cancel
+  </button>
+</form>

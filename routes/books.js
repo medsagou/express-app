@@ -1,21 +1,22 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
+// const multer = require("multer");
 const Book = require("../models/bookModel");
 const Author = require("../models/authorModel");
 const path = require("path");
-const uploadPath = path.join("public", Book.coverImageBasePath);
-const imageMimeTypes = ["image/jpeg", "image/png", "images/gif"];
-const upload = multer({
-  dest: uploadPath,
-  //   fileFilter: (req, file, callback) => {
-  //     callback(null, imageMimeTypes.includes(file.minetype));
-  //   }
-});
-const cpUpload = upload.fields([
-  { name: "cover", maxCount: 1 },
-  { name: "bookPdf", maxCount: 1 },
-]);
+const { json } = require("body-parser");
+// const uploadPath = path.join("public", Book.coverImageBasePath);
+// const imageMimeTypes = ["image/jpeg", "image/png", "images/gif"];
+// const upload = multer({
+//   dest: uploadPath,
+//   //   fileFilter: (req, file, callback) => {
+//   //     callback(null, imageMimeTypes.includes(file.minetype));
+//   //   }
+// });
+// const cpUpload = upload.fields([
+//   { name: "cover", maxCount: 1 },
+//   { name: "bookPdf", maxCount: 1 },
+// ]);
 
 router.get("/", async (req, res) => {
   let query = Book.find();
@@ -45,36 +46,59 @@ router.get("/new", async (req, res) => {
   res.render("books/new", { book: new Book() });
 });
 
-router.post("/", cpUpload, async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
-    const files = req.files;
+    const book = await Book.findById(req.params.id);
+    const author = await Author.findById(book.author);
+    res.render("books/view", {
+      book: book,
+      author: author,
+    });
+    // console.log(book.author);
+  } catch {
+    console.log("Error Loading the book");
+  }
+});
 
-    const coverName = files["cover"][0].filename;
-    const pdfName = files["bookPdf"][0].filename;
+router.post("/", async (req, res) => {
+  try {
+    // const files = req.files;
+
+    // const coverName = files["cover"][0].filename;
+    // const pdfName = files["bookPdf"][0].filename;
 
     const book = new Book({
       title: req.body.title,
-      author: req.body.author,
+      //   author: req.body.author,
       description: req.body.description,
       publicationYear: req.body.publicationYear,
-      coverImageName: coverName,
-      bookPdfName: pdfName,
     });
-    const allAuthors = await Author.find({}, "name");
-    allAuthors.forEach(async (author) => {
-      if (author.name.toUpperCase == req.body.author.toUpperCase) {
-      } else {
-        const author = new Author({
-          name: req.body.author,
-        });
+    saveCover(book, req.body.cover);
+    savePdf(book, req.body.bookPdf);
 
-        const newAuth = await author.save();
+    const allAuthors = await Author.find({}, "name");
+    let testAuth = true;
+    allAuthors.forEach(async (author) => {
+      if (
+        author.name.toUpperCase() === req.body.author.toUpperCase.toUpperCase()
+      ) {
+        const authorId = author.id;
+        testAuth = false;
       }
     });
-
+    if (testAuth == true) {
+      const author = new Author({
+        name: req.body.author,
+      });
+      const newAuth = await author.save();
+      const authorId = newAuth.id;
+    }
+    book.author = authorId;
     const newBook = await book.save();
-    res.redirect("/books");
-  } catch {
+
+    // res.redirect("/books");
+  } catch (err) {
+    console.log(err);
     console.log("There is an error");
     res.redirect("/books/new");
   }
@@ -85,4 +109,20 @@ router.post("/", cpUpload, async (req, res) => {
   //     res.render("/books/new");
   //   }
 });
+
+function saveCover(book, fileEncoded) {
+  if (fileEncoded == null) return;
+  const cover = JSON.parse(fileEncoded);
+  if (cover != null) {
+    book.coverImage = new Buffer.from(cover.data, "base64");
+  }
+}
+function savePdf(book, fileEncoded) {
+  if (fileEncoded == null) return;
+  const cover = JSON.parse(fileEncoded);
+  if (cover != null) {
+    book.bookPdf = new Buffer.from(cover.data, "base64");
+  }
+}
+
 module.exports = router;
