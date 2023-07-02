@@ -1,51 +1,101 @@
-<div>
-  <label for="title">Title:</label>
-  <input
-    type="text"
-    id="title"
-    name="title" />
-</div>
-<div>
-  <label for="author">Author:</label>
-  <input
-    type="text"
-    id="author"
-    name="author" />
-</div>
-<div>
-  <label for="description">Description:</label>
-  <textarea
-    id="description"
-    name="description"></textarea>
-</div>
-<div>
-  <label for="publicationYear">Publication Year:</label>
-  <input
-    type="number"
-    id="publicationYear"
-    name="publicationYear"
-    value="<%= new Date().getFullYear() %>"
-    max="<%= new Date().getFullYear() %>" />
-</div>
-<div>
-  <label for="cover">Cover Image:</label>
-  <input
-    type="file"
-    id="cover"
-    name="cover"
-    class="filepond" />
-</div>
-<div>
-  <label for="bookPdf">Book PDF:</label>
-  <input
-    type="file"
-    id="bookPdf"
-    name="bookPdf"
-    class="filepond" />
-</div>
-<div>
-  <button type="submit">Upload Book</button>
-</div>
-<div>
-  <a href="/books">Cancel</a>
+<div
+  class="grid md:grid-cols-2 md:gap-6 place-content-center place-items-center">
+  <div class="relative z-0 w-full mb-6 group">
+    <div class="relative z-0 w-full mb-6 group">
+      <input
+        type="text"
+        name="title"
+        id="title"
+        class="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-white appearance-none dark:text-white dark:border-white dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+        placeholder=" "
+        required />
+      <label
+        for="title"
+        class="peer-focus:font-medium absolute text-sm text-white dark:text-white duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-regal-blue peer-focus:dark:text-regal-blue peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+        >Title</label
+      >
+    </div>
+    <div class="relative z-0 w-full mb-6 group">
+      <input
+        type="text"
+        name="author"
+        id="author"
+        class="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-white appearance-none dark:text-white dark:border-white dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+        placeholder=" "
+        required />
+      <label
+        for="author"
+        class="peer-focus:font-medium absolute text-sm text-white dark:text-white duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-regal-blue peer-focus:dark:text-regal-blue peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+        >Author</label
+      >
+    </div>
+    <div class="relative z-0 w-full mb-6 group">
+      <textarea
+        name="description"
+        id="description"
+        class="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-white appearance-none dark:text-white dark:border-white dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+        placeholder=" "
+        required></textarea>
+      <label
+        for="description"
+        class="peer-focus:font-medium absolute text-sm text-white dark:text-white duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-regal-blue peer-focus:dark:text-regal-blue peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+        >Description</label
+      >
+    </div>
+
+    <div class="relative z-0 w-full mb-6 group">
+      <input
+        type="number"
+        name="publicationYear"
+        id="publicationYear"
+        class="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-white appearance-none dark:text-white dark:border-white dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+        placeholder=" "
+        value="<%= new Date().getFullYear() %>"
+        max="<%= new Date().getFullYear() %>"
+        required />
+      <label
+        for="publicationYear"
+        class="peer-focus:font-medium absolute text-sm text-white dark:text-white duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-regal-blue peer-focus:dark:text-regal-blue peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+        >Publication Year</label
+      >
+    </div>
+    <div class="relative z-0 w-full mb-6 group">
+      <label
+        for="bookPdf"
+        class="text-sm text-white dark:text-white top-3 -z-10 peer-focus:text-regal-blue peer-focus:dark:text-regal-blue"
+        >Book PDF</label
+      >
+      <input
+        type="file"
+        id="bookPdf"
+        name="bookPdf"
+        class="filepond" />
+    </div>
+    <div class="my-4">
+      <button
+        type="submit"
+        class="px-4 py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700">
+        Upload Book
+      </button>
+    </div>
+    <div class="my-4">
+      <a
+        href="/books"
+        class="text-blue-500 font-bold hover:text-blue-700"
+        >Cancel</a
+      >
+    </div>
+  </div>
+  <div class="relative z-0 w-full mb-6 group">
+    <label
+      for="cover"
+      class="text-sm text-white dark:text-white top-3 -z-10 peer-focus:text-regal-blue peer-focus:dark:text-regal-blue text-center"
+      >Cover Image</label
+    >
+    <input
+      type="file"
+      id="cover"
+      name="cover"
+      class="filepond" />
+  </div>
 </div>

@@ -18,6 +18,11 @@ app.set("view engine", "ejs");
 
 app.use(methodOverride("_method"));
 app.use(express.static("public"));
+
+// app.get("/styles/style.css", (req, res) => {
+//   res.sendFile(__dirname + "/style.css");
+// });
+
 app.use(bodyParser.urlencoded({ limit: "10mb", extended: false }));
 const mongoose = require("mongoose");
 
