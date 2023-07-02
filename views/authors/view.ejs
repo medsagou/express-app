@@ -2,7 +2,11 @@
 <h3>Books</h3>
 <ul>
   <% books.forEach((book)=> { %>
-  <li><%= book.title %> ( <%= book.publicationYear %> )</li>
+  <li>
+    <a href="/books/<%= book.id %>"
+      ><%= book.title %> ( <%= book.publicationYear %> )
+    </a>
+  </li>
   <% }) %>
 </ul>
 

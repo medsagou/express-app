@@ -1,0 +1,11 @@
+<h2>Delete Confirmation</h2>
+<div>
+  <p>
+    Are you sure you want to delete
+    <a href="/books/<%= book.id %>"> <%= book.title %></a>
+  </p>
+</div>
+<div>
+  <%- include('./delete', { url: '/books/' + book.id}) %>
+  <button class="cancel">Cancel</button>
+</div>

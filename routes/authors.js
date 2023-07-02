@@ -21,8 +21,8 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const author = await Author.findOne({ _id: req.params.id });
-  const books = await Book.find({ author: author.name });
-  //   const books = await Book.find({ author: author.id });
+  //   const books = await Book.find({ author: author.name });
+  const books = await Book.find({ author: author.id });
   res.render("authors/view", { author: author, books: books });
 });
 
@@ -61,19 +61,23 @@ router.get("/:id/delete", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   let author;
+  let books;
+
   try {
-    author = await Author.findById(req.params.id);
-    await author.remove();
+    books = await Book.find({ author: req.params.id });
+
+    books.forEach((book) => {
+      book.deleteOne();
+    });
+    author = await Author.deleteOne({ _id: req.params.id });
     res.redirect("/authors");
   } catch {
-    if (author == null) {
-      res.redirect("/");
+    if (author != null) {
+      res.redirect("/authors/" + author.id);
     } else {
-      res.redirect("/authors/" + authors.id);
+      res.redirect("/");
     }
   }
-
-  res.send("delete author with id " + req.params.id);
 });
 
 module.exports = router;

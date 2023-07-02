@@ -32,12 +32,12 @@ router.get("/", async (req, res) => {
 
   try {
     const books = await query.exec();
-    res.render("books/index", {
+    res.render("books", {
       books: books,
       searchOptions: req.query,
     });
   } catch {
-    res.redirect("/books/index");
+    res.redirect("/books");
   }
 });
 
@@ -57,6 +57,7 @@ router.get("/:id", async (req, res) => {
     // console.log(book.author);
   } catch {
     console.log("Error Loading the book");
+    res.redirect("/books");
   }
 });
 
@@ -81,6 +82,8 @@ router.post("/", async (req, res) => {
     allAuthors.forEach(async (author) => {
       if (author.name.toUpperCase() === req.body.author.toUpperCase()) {
         const authorId = author.id;
+
+        book.author = authorId;
         testAuth = false;
       }
     });
@@ -90,11 +93,12 @@ router.post("/", async (req, res) => {
       });
       const newAuth = await author.save();
       const authorId = newAuth.id;
+
+      book.author = authorId;
     }
-    book.author = authorId;
     const newBook = await book.save();
 
-    // res.redirect("/books");
+    res.redirect("/books/" + book.id);
   } catch (err) {
     console.log(err);
     console.log("There is an error");
@@ -123,38 +127,87 @@ router.get("/:id/edit", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
+  let book;
+  let author;
   try {
-    const book = await Book.findById(req.params.id);
-    const author = await Book.findById(book.author);
+    book = await Book.findById(req.params.id);
+    author = await Book.findById(book.author);
 
     book.title = req.body.title;
     book.description = req.body.description;
     book.publicationYear = req.body.publicationYear;
     saveCover(book, req.body.cover);
-
     const allAuthors = await Author.find({}, "name");
     let testAuth = true;
     allAuthors.forEach(async (author) => {
       if (author.name.toUpperCase() === req.body.author.toUpperCase()) {
         const authorId = author.id;
-        testAuth = false;
         book.author = authorId;
+        testAuth = false;
       }
     });
+
+    console.log(testAuth);
     if (testAuth == true) {
-      const author = new Author({
+      const newAuthor = new Author({
         name: req.body.author,
       });
-      const newAuth = await author.save();
+      const newAuth = await newAuthor.save();
       const authorId = newAuth.id;
       book.author = authorId;
     }
-    book.save;
+    book.save();
+    res.redirect("/books/" + book.id);
   } catch (err) {
-    console.log(err);
+    res.redirect("/books/" + book.id + "/edit");
   }
 });
 
+router.get("/:id/delete", async (req, res) => {
+  let book;
+  try {
+    book = await Book.findById(req.params.id);
+    res.render("partials/deleteConfirmationBook", {
+      book: book,
+    });
+  } catch (err) {
+    console.log(err);
+    if (book != null && book !== "") {
+      res.redirect("/books/" + book.id);
+    } else {
+      res.redirect("/books");
+    }
+  }
+});
+router.delete("/:id", async (req, res) => {
+  let book;
+  try {
+    book = await Book.deleteOne({ _id: req.params.id });
+
+    res.redirect("/books");
+  } catch {
+    if (book != null) {
+      res.redirect("/books/" + book.id);
+    } else {
+      res.redirect("/");
+    }
+  }
+});
+
+router.get("/:id/download", async (req, res) => {
+  let book;
+  try {
+    book = await Book.findById(req.params.id);
+    res.set({
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename=${book.title}.pdf`,
+    });
+    res.send(book.bookPdf);
+  } catch (err) {
+    console.log(err);
+    console.log("Eroor Downloading The Book");
+  }
+});
 function saveCover(book, fileEncoded) {
   if (fileEncoded == null) return;
   const cover = JSON.parse(fileEncoded);
